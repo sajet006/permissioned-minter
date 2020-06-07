@@ -38,4 +38,4 @@
 
 ### Who do I talk to? ###
 
-* Contact us on Discord for any questions
+* Contact us on [Discord](https://discord.gg/xfhCx2K) for any questions
