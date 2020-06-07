@@ -6,6 +6,11 @@
 * Minters submit requests for minting to the Manager for Approval.
 * The manager can add minters, remove minters, Approve minting requests, and deny minting requests.
 
+### Flow Charts ###
+![alt text](https://github.com/sajet006/permissioned-minter/blob/master/Images/Creating%20Requests.png "Creating Requests")
+![alt text](https://github.com/sajet006/permissioned-minter/blob/master/Images/Approve%20and%20Deny.png "Approve and Deny")
+
+
 ### UI ###
 
 ![alt text](https://github.com/sajet006/permissioned-minter/blob/master/Images/Permissioned%20Minter.png "Permissioned Minter")
