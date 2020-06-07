@@ -8,9 +8,9 @@
 
 ### UI ###
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Permissioned Minter")
+![alt text](https://github.com/sajet006/permissioned-minter/blob/master/Images/Permissioned%20Minter.png "Permissioned Minter")
 
-### Version###
+### Version ###
 
 * Version 0.1
 
@@ -30,6 +30,11 @@
 
 * Proper CSS
 * Accept and decline button with web3 
+
+### Kovan Deployement ###
+
+* The Permission Minting Address : 0x04deb45754c6f7304c403b941a054e7d4f4a51ab
+* The Minter Token (MNT) Address : 0xccee3455602020f4675fa763d656a65506d81172
 
 ### Who do I talk to? ###
 
