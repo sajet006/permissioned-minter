@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css';
 import './App.css';
-import { Table, Tag, Space } from 'antd';
+import { Table, Tag } from 'antd';
 import Footer from './Footer';
 import Header from './Header';
 import PermissionedMintingInstance from './PermissionedMinting';
@@ -133,15 +133,15 @@ class App extends Component {
 		await this.loadBlockchainData();
 	};
 
-	FinaizeRequest = async (event) => {
+	async FinaizeRequest(index,bool){
 
-		event.preventDefault();
+		// event.preventDefault();
 		window.toastProvider.addMessage('Processing...', {
 			secondaryMessage: 'Check transaction details in your wallet',
 			variant: 'processing'
 		});
 		await PermissionedMintingInstance.methods
-			.finalizeMintRequest(this.state.enteredAmount)
+			.finalizeMintRequest(index,bool)
 			.send({
 				from: this.state.account
 			})
@@ -157,6 +157,7 @@ class App extends Component {
 	};
 
 	IsTempMinter= async (event) => {
+		event.preventDefault();
 		let isTempMinter=await PermissionedMintingInstance.methods
 			.tempMinters(this.state.enteredCheckingAddress)
 			.call()
@@ -196,31 +197,30 @@ class App extends Component {
 		this.setState({requests})
 	};
 
-
 	render() {
 		// render appropriate toasts for processing/success transactions
 		let message = <ToastMessage.Provider ref={(node) => (window.toastProvider = node)} />;
+		
 		const columns = [
 			{
-			title: 'Request Index',
-			dataIndex: 'key',
-			key: 'key',
+				title: 'Request Index',
+				dataIndex: 'index'
 			},
+
 			{
 				title: 'Amount',
 				dataIndex: 'amount',
-				key: 'amount',
 			},
+
 			{
 			title: 'Address',
-			dataIndex: '1',
-			key: 'address',
+			dataIndex: 'minter',
 			render: text => <a href={`https://kovan.etherscan.io/address/${text}`}>{text}</a>
 			},
+
 			{
 			title: 'Status',
-			key: 'status',
-			dataIndex: 'status',
+			dataIndex: 'requestStatus',
 			render:
 				status => {
 					let detailStatus;
@@ -245,42 +245,31 @@ class App extends Component {
 				}
 	
 			},
+
 			{
 			title: 'Finalize Request',
-			key: 'finalize',
-			render: (text, record) => (
-				<Space size="middle">
-					<Button variant="success" >Approve</Button>
-					<Button variant="danger" >Decline</Button>
-				</Space>
-			),
-			},
+			render: record => {
+				let requestFinalizeButton;
+				if ((this.state.requests)[record.index]["requestStatus"]==="1") {
+						requestFinalizeButton = (
+							<div>
+								<ToastMessage.Provider ref={(node) => (window.toastProvider = node)} />
+								<Button variant="success" onClick={() => this.FinaizeRequest(record.index,true)}>Approve</Button>
+								<Button variant="danger" onClick={() => this.FinaizeRequest(record.index,false)}>Decline</Button>
+							</div>
+						);
+				} 
+				else {
+					requestFinalizeButton = (
+						<Button color="blue" disabled>Finalized</Button>
+					);
+				}
+				return requestFinalizeButton;
+				},
+			}
+
 		];
 		
-		// let requests = [
-		// 	{
-		// 	key: '0',
-		// 	index: '0',
-		// 	amount: 32,
-		// 	address: '0xf13f977aac9b001f155889b9efa7a6628fb7a181',
-		// 	status: ["Pending"],
-		// 	},
-		// 	{
-		// 	key: '1',
-		// 	index: '1',
-		// 	amount: 42,
-		// 	address: '0xf13f977aac9b001f155889b9efa7a6628fb7a181',
-		// 	status: ["Pending"],
-		// 	},
-		// 	{
-		// 	key: '2',
-		// 	index: '2',
-		// 	amount: 32,
-		// 	address: '0xf13f977aac9b001f155889b9efa7a6628fb7a181',
-		// 	status: ["Pending"],
-		// 	}
-		// ];
-
 		// render buttons
 		let tempMinterButton;
 		if (this.state.enteredAddress!=='0' && (this.state.enteredAddress).length===42) {
@@ -540,6 +529,7 @@ class App extends Component {
 									
 									</Flex>
 								<Table dataSource={this.state.requests} columns={columns} />
+								
 							</div>
 						</div>
 					)
